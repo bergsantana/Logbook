@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  logbook-rabbitmq-dev:
+    image: rabbitmq:3-management-alpine
+    container_name: logbook-rabbitmq-dev
+    environment:
+      - RABBITMQ_DEFAULT_USER=logbook
+      - RABBITMQ_DEFAULT_PASS=logbook
+      - RABBITMQ_DEFAULT_VHOST=logbook
+      - RABBITMQ_LOG_BASE=/var/log/rabbitmq
+      - RABBITMQ_LOGS=rabbitmq.log
+    ports:
+      - 5682:5672
+      - 15682:15672
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - rabbitmq-logs:/var/log/rabbitmq
+    networks:
+      - logbook-network
+
+networks:
+  logbook-network:
+    name: logbook-network
+    driver: bridge
+
+volumes:
+  rabbitmq-logs:
+    driver: local
