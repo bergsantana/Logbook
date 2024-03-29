@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  logbook-backend-dev:
+    container_name: logbook-backend-dev
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      target: development
+    command: npm run start:debug
+    volumes:
+      - '/var/lib/docker/containers:/var/lib/docker/containers:ro'
+      - '/var/run/docker.sock:/var/run/docker.sock:ro'
+      - '/sys/fs/cgroup:/hostfs/sys/fs/cgroup:ro'
+      - '/proc:/hostfs/proc:ro'
+      - '/:/hostfs:ro'
+
+    restart: always
+    networks:
+      - logbook-network
+    ports:
+      - 7777:7777
+
+volumes:
+  rabbitmq-logs:
+    external:
+      name: logbook-backend-dev_rabbitmq-logs
+networks:
+  logbook-network:
+    name: logbook-network
+    external: true
